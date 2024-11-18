@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Image Upload Result</title>
+</head>
+<body>
+<h1>Image Upload Result</h1>
+<?php
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if (isset($_FILES['image']) && isset($_POST['university'])) {
+$university = $_POST['university'];
+$image = $_FILES['image'];
+// Check if the image file size is greater than 900KB
+$maxFileSize = 901 * 1024; // 901 KB in bytes
+if ($image['size'] > $maxFileSize) {
+// Database Connection
+$dbHost = "localhost";
+$dbUser = "root";
+$dbPass = "";
+// Connect to the database
+$conn = new mysqli($dbHost, $dbUser, $dbPass);
+if ($conn->connect_error) {
+die("Database connection failed: " . $conn->connect_error);
+}
+// Check if the database exists
+$dbName = $conn->real_escape_string($university);
+$checkDbQuery = "SELECT SCHEMA_NAME FROM
+INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '$dbName'";
+$result = $conn->query($checkDbQuery);
+if ($result->num_rows > 0) {
+// Database exists, connect to it
+$conn->close();
+$conn = new mysqli($dbHost, $dbUser, $dbPass, $dbName);
+if ($conn->connect_error) {
+die("Database connection failed: " . $conn->connect_error);
+}
+// Save the image to the database
+$imageData = file_get_contents($image['tmp_name']);
+$imageData = $conn->real_escape_string($imageData);
+$sql = "CREATE TABLE IF NOT EXISTS images (
+id INT AUTO_INCREMENT PRIMARY KEY,
+image_data LONGBLOB
+)";
+if ($conn->query($sql) === TRUE) {
+$insertSql = "INSERT INTO images (image_data) VALUES ('$imageData')";
+if ($conn->query($insertSql) === TRUE) {
+echo "<p>Image uploaded and saved to the database.</p>";
+// Redirect back to the referring page after 5 seconds
+echo "<script>
+setTimeout(function() {
+window.location.href = '{$_SERVER['HTTP_REFERER']}';
+}, 5000);
+</script>";
+} else {
+echo "<p>Error uploading image: " . $conn->error . "</p>";
+}
+} else {
+echo "<p>Error creating table: " . $conn->error . "</p>";
+}
+// Close the database connection
+$conn->close();
+} else {
+echo "<p>Database does not exist: $dbName</p>";
+}
+} else {
+// Image size is less than 900KB, show a popup and wait for reupload
+echo "<script>
+alert('Error: Image size must be greater than 900KB. Please reupload.');
+window.history.back();
+</script>";
+}
+}
+}
+?>
+</body>
+</html>

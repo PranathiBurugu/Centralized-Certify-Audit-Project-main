@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compare Images</title>
+<style>
+body {
+font-family: Arial, sans-serif;
+margin: 0;
+padding: 0;
+background-color: #f4f4f4;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+min-height: 100vh;
+}
+.menu {
+background-color: #333;
+color: #fff;
+padding: 10px;
+position: absolute;
+top: 0;
+right: 0;
+}
+.menu ul {
+list-style-type: none;
+margin: 0;
+padding: 0;
+text-align: right;
+}
+.menu li {
+display: inline;
+margin-right: 20px;
+}
+.menu a {
+color: #fff;
+text-decoration: none;
+font-weight: bold;
+}
+.card {
+background-color: #fff;
+border-radius: 8px;
+padding: 20px;
+box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+outline: 2px solid #ccc;
+width: 400px;
+max-width: 100%;
+box-sizing: border-box;
+margin-top: 50px; /* Adjusted margin for better spacing */
+}
+/* Additional styling for form elements */
+.form-group {
+margin-bottom: 15px;
+}
+label {
+display: block;
+margin-bottom: 5px;
+font-weight: bold;
+}
+input[type="file"] {
+padding: 5px;
+border: 1px solid #ccc;
+border-radius: 4px;
+width: 100%;
+}
+input[type="submit"] {
+background-color: #007bff;
+color: #fff;
+padding: 10px 20px;
+border: none;
+border-radius: 4px;
+cursor: pointer;
+}
+/* ... any other custom styles ... */
+</style>
+</head>
+<body>
+<div class="menu">
+<ul>
+<li><a href="u.html">Home</a></li>
+<li><a href="r.html">college login</a></li>
+<li><a href="admin.html">Admin Login</a></li>
+</ul>
+</div>
+<div class="card">
+<h1>Compare Images</h1>
+<form action="compare.php" method="post" enctype="multipart/form-data">
+<div class="form-group">
+<label for="userImage">Upload Your Image:</label>
+<input type="file" name="userImage" accept="image/*">
+</div>
+<div class="form-group">
+<label for="dbname">Enter College/University/Company:</label>
+<input type="text" name="dbname">
+</div>
+<input type="submit" value="Compare Image">
+</form>
+</div>
+</body>
+</html>
